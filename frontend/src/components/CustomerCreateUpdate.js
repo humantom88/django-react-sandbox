@@ -4,9 +4,20 @@ import CustomersService from "../data/CustomersService";
 const customersService = new CustomersService();
 
 class CustomerCreateUpdate extends Component {
+
+  state = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    description: ''
+  }
+
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
@@ -25,15 +36,24 @@ class CustomerCreateUpdate extends Component {
     }
   }
 
+  handleChange(fieldName) {
+    return (ev) => {
+      ev.preventDefault()
+      this.setState({
+        [fieldName]: ev.target.value
+      })
+    }
+  }
+
   handleCreate() {
     customersService
       .createCustomer({
-        first_name: this.refs.firstName.value,
-        last_name: this.refs.lastName.value,
-        email: this.refs.email.value,
-        phone: this.refs.phone.value,
-        address: this.refs.address.value,
-        description: this.refs.description.value,
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email: this.state.email,
+        phone: this.state.phone,
+        address: this.state.address,
+        description: this.state.description,
       })
       .then((result) => {
         alert("Customer created!");
@@ -47,12 +67,12 @@ class CustomerCreateUpdate extends Component {
     customersService
       .updateCustomer({
         pk: pk,
-        first_name: this.refs.firstName.value,
-        last_name: this.refs.lastName.value,
-        email: this.refs.email.value,
-        phone: this.refs.phone.value,
-        address: this.refs.address.value,
-        description: this.refs.description.value,
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email: this.state.email,
+        phone: this.state.phone,
+        address: this.state.address,
+        description: this.state.description
       })
       .then((result) => {
         alert("Customer updated!");
@@ -80,17 +100,17 @@ class CustomerCreateUpdate extends Component {
       <form onSubmit={this.handleSubmit}>
         <div className="form-group">
           <label> First Name: </label>{" "}
-          <input className="form-control" type="text" ref="firstName" />
+          <input className="form-control" type="text" onChange={this.handleChange("firstName")} />
           <label> Last Name: </label>{" "}
-          <input className="form-control" type="text" ref="lastName" />
+          <input className="form-control" type="text" onChange={this.handleChange("lastName")} />
           <label> Phone: </label>{" "}
-          <input className="form-control" type="text" ref="phone" />
+          <input className="form-control" type="text" onChange={this.handleChange("phone")} />
           <label> Email: </label>{" "}
-          <input className="form-control" type="text" ref="email" />
+          <input className="form-control" type="text" onChange={this.handleChange("email")} />
           <label> Address: </label>{" "}
-          <input className="form-control" type="text" ref="address" />
+          <input className="form-control" type="text" onChange={this.handleChange("address")} />
           <label> Description: </label>{" "}
-          <textarea className="form-control" ref="description">
+          <textarea className="form-control" onChange={this.handleChange("description")}>
             {" "}
           </textarea>
           <input className="btn btn-primary" type="submit" value="Submit" />
